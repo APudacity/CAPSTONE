@@ -38,7 +38,7 @@ jobs:
             source ~/.$PROJECT_NAME/bin/activate
             # make lint for Docker file and index.html
             make lint
-  push-docker-image:
+  pushdocker-image:
     docker:
       - image: circleci/golang:1.15
     working_directory: ~/repo      
@@ -85,10 +85,28 @@ jobs:
 
             curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
             sudo mv /tmp/eksctl /usr/local/bin
-            eksctl version                     
+            eksctl version                  
+            # Install awscli 
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+            export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+            export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
+            
+            aws configure list
+            # Create Kubernetes Cluster
+            CLUSTER_NAME="${PROJECT_NAME}.${AWS_DEFAULT_REGION}.eksctl.io"
+
+            eksctl create cluster --config-file=config_cluster.yaml
+            kubectl apply -f deployment.yml
+            kubectl apply -f services.yml
+                         
 workflows:
   default:
     jobs:
       - build
-      - push-docker-image
-      - deploy-kubernetes
+      - pushdocker-image:
+           requires: [build]
+      - deploy-kubernetes:
+           requires: [pushdocker-image]
