@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capstoneasp
+  labels: 
+    app: capstoneap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: capstoneap
+  template:
+    metadata:
+      labels:
+        app: capstoneap
+        role: rolling-update
+    spec:
+      containers:
+      - name: capstoneap
+        image: asitpant80/capstoneap:new
+        imagePullPolicy: "Always"
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
