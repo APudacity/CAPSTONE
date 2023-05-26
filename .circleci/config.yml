@@ -38,6 +38,24 @@ jobs:
             source ~/.$PROJECT_NAME/bin/activate
             # make lint for Docker file and index.html
             make lint
+  push-docker-image:
+    docker:
+      - image: circleci/golang:1.15
+    working_directory: ~/repo      
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 19.03.13
+      - run:
+          name: Build & uploading the Docker image
+          command: |
+            # Building Docker Image
+            docker build -t $DOCKERHUB_USERID/$IMAGE_NAME:$IMAGE_VERSION .
+            docker image ls
+            
+            # Upload Docker Image
+            docker login -u $DOCKERHUB_USERID -p $DOCKERHUB_PASSWORD
+            docker push $DOCKERHUB_USERID/$IMAGE_NAME:$IMAGE_VERSION            
 workflows:
   default:
     jobs:
