@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: capstoneap
+spec:
+  selector:
+    app: capstoneap
+  ports:
+    - port: 8000
+      targetPort: 80
+  type: LoadBalancer
