@@ -60,3 +60,4 @@ workflows:
   default:
     jobs:
       - build
+      - push-docker-image
