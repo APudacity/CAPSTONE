@@ -50,7 +50,7 @@ jobs:
           name: Build & uploading the Docker image
           command: |
             # Building Docker Image
-            echo $DOCKERHUB_USERID
+            echo $DOCKERHUB_USERID 
             echo $IMAGE_NAME
             echo $IMAGE_VERSION
             docker build -t $DOCKERHUB_USERID/$IMAGE_NAME:$IMAGE_VERSION .
