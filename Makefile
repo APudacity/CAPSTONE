@@ -13,8 +13,8 @@ install-awscli:
 	sudo apt install awscli
 
 install-hadolint:
-	./install_hadolint.sh
-
+	sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64
+	sudo chmod +x /bin/hadolint
 #install-kubectl:
 #	./install_kubectl.sh
 
