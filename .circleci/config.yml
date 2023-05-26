@@ -98,7 +98,7 @@ jobs:
             # Create Kubernetes Cluster
             CLUSTER_NAME="${PROJECT_NAME}.${AWS_DEFAULT_REGION}.eksctl.io"
 
-            eksctl create cluster --config-file=config_cluster.yaml
+            eksctl create cluster --config-file=config_cluster.yml
             kubectl apply -f deployment.yml
             kubectl apply -f services.yml
                          
