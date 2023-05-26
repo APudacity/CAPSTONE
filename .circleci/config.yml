@@ -50,7 +50,7 @@ jobs:
           name: Build & uploading the Docker image
           command: |
             # Building Docker Image
-            echo $DOCKERHUB_USERID 
+            echo $DOCKERHUB_USERID
             echo $IMAGE_NAME
             echo $IMAGE_VERSION
             docker build -t $DOCKERHUB_USERID/$IMAGE_NAME:$IMAGE_VERSION .
@@ -58,9 +58,37 @@ jobs:
             
             # Upload Docker Image
             docker login -u $DOCKERHUB_USERID -p $DOCKERHUB_PASSWORD
-            docker push $DOCKERHUB_USERID/$IMAGE_NAME:$IMAGE_VERSION            
+            docker push $DOCKERHUB_USERID/$IMAGE_NAME:$IMAGE_VERSION   
+  deploy-kubernetes:
+    docker:
+      - image: cimg/base:2021.07
+      
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["3e:10:02:47:73:2f:2b:3f:a2:28:44:0c:ed:80:6a:29"]
+      - run:
+          name: install dependencies
+          command: |
+            
+            # Install kubectl
+            curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.25.9/2023-05-11/bin/linux/amd64/kubectl
+
+            sudo chmod +x ./kubectl
+            sudo mv ./kubectl /usr/local/bin
+            sudo echo 'export PATH=$PATH:$HOME/bin' >> ~/.bash_profile
+            kubectl version --short --client
+            
+            # Install eksctl
+
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            sudo mv /tmp/eksctl /usr/local/bin
+            eksctl version                     
 workflows:
   default:
     jobs:
       - build
       - push-docker-image
+      - deploy-kubernetes
