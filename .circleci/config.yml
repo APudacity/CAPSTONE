@@ -98,7 +98,14 @@ jobs:
             # Create Kubernetes Cluster
             CLUSTER_NAME="${PROJECT_NAME}.${AWS_DEFAULT_REGION}.eksctl.io"
 
-            eksctl create cluster --config-file=config_cluster.yml
+
+            if kubectl config get-clusters | grep -q ${CLUSTER_NAME}; then
+                echo "Cluster '${CLUSTER_NAME}' already exists! Skipping this task"
+            else
+                echo "Creating cluster..."
+                eksctl create cluster --config-file=config_cluster.yaml
+            fi
+   
             kubectl apply -f deployment.yml
             kubectl apply -f services.yml
   Rollover-deployment:   
@@ -145,9 +152,9 @@ workflows:
   default:
      jobs:
        - build
-    #    - pushdocker-image:
-    #        requires: [build]
-    #  - deploy-kubernetes:
-    #       requires: [pushdocker-image]
-    #   - Rollover-deployment:
-    #        requires: [pushdocker-image]
+       - pushdocker-image:
+            requires: [build]
+       - deploy-kubernetes:
+            requires: [pushdocker-image]
+       - Rollover-deployment:
+            requires: [pushdocker-image]
