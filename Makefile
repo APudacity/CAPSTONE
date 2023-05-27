@@ -1,8 +1,3 @@
-## The Makefile includes instructions on environment setup and lint tests
-IMAGE_NAME="capstone-projectAP"	
-IMAGE_VERSION="V1.0"
-PROJECT_NAME="capstone-projectAP"
-
 install-dependencies:
 	sudo apt-get install -y nodejs npm
 	sudo apt-get install docker.io
@@ -15,11 +10,6 @@ install-awscli:
 install-hadolint:
 	sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64
 	sudo chmod +x /bin/hadolint
-#install-kubectl:
-#	./install_kubectl.sh
-
-#install-eksctl:
-#	./install_eksctl.sh
 
 lint:
 	# See local hadolint install instructions:   https://github.com/hadolint/hadolint
@@ -27,25 +17,3 @@ lint:
 	hadolint Dockerfile
 	# This is linter for HTML file.
 	htmllint index.html
-
-#build-docker:
-#	./build_docker.sh
-
-#upload-docker:
-#	./upload_docker.sh
-
-#create-eks-cluster:
-#	./create_eks_cluster.sh
-
-#deploy-kubernetes:
-#	./deploy_kubernetes.sh
-
-#rolling-update:
-#	./rolling_updates.sh
-
-#rollback:
-#	./rollback.sh
-
-#cleanup-resources:
-	# Remove service & deployment
-#	./cleanup_resources.sh
