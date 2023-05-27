@@ -105,40 +105,40 @@ jobs:
      docker:
       - image: cimg/base:2021.07
       
-    working_directory: ~/repo
+     working_directory: ~/repo
 
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints: ["f2:b5:a8:a4:e0:ab:7b:46:31:2f:1c:a5:bf:32:a2:26"]
-      - run:
-          name: install dependencies and deploy
-          command: |
-            
-            # Install kubectl
-            curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.25.9/2023-05-11/bin/linux/amd64/kubectl
+     steps:
+        - checkout
+        - add_ssh_keys:
+            fingerprints: ["f2:b5:a8:a4:e0:ab:7b:46:31:2f:1c:a5:bf:32:a2:26"]
+        - run:
+            name: install dependencies and deploy
+            command: |
 
-            sudo chmod +x ./kubectl
-            sudo mv ./kubectl /usr/local/bin
-            sudo echo 'export PATH=$PATH:$HOME/bin' >> ~/.bash_profile
-            kubectl version --short --client
-            
-            # Install eksctl
+              # Install kubectl
+              curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.25.9/2023-05-11/bin/linux/amd64/kubectl
 
-            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-            sudo mv /tmp/eksctl /usr/local/bin
-            eksctl version                  
-            # Install awscli 
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
-            export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-            export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-            export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
-            aws configure list
-            
-            aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $PROJECT_NAME
-            kubectl set image deployment/$PROJECT_NAME $PROJECT_NAME=$DOCKERHUB_USERID/$IMAGE_NAME:$IMAGE_VERSION
+              sudo chmod +x ./kubectl
+              sudo mv ./kubectl /usr/local/bin
+              sudo echo 'export PATH=$PATH:$HOME/bin' >> ~/.bash_profile
+              kubectl version --short --client
+
+              # Install eksctl
+
+              curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+              sudo mv /tmp/eksctl /usr/local/bin
+              eksctl version                  
+              # Install awscli 
+              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+              unzip awscliv2.zip
+              sudo ./aws/install
+              export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+              export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+              export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
+              aws configure list
+
+              aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $PROJECT_NAME
+              kubectl set image deployment/$PROJECT_NAME $PROJECT_NAME=$DOCKERHUB_USERID/$IMAGE_NAME:$IMAGE_VERSION
             
                          
 workflows:
