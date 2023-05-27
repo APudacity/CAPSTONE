@@ -144,9 +144,9 @@ jobs:
 workflows:
   default:
      jobs:
-      - build
-      - pushdocker-image:
-           requires: [build]
+       - build
+       - pushdocker-image:
+            requires: [build]
     #  - deploy-kubernetes:
     #       requires: [pushdocker-image]
        - Rollover-deployment:
