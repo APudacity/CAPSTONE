@@ -149,3 +149,4 @@ workflows:
     #  - deploy-kubernetes:
     #       requires: [pushdocker-image]
        - Rollover-deployment:
+            requires: [pushdocker-image]
