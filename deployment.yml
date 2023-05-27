@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: capstoneap
-        image: asitpant80/capstoneap:new
+        image: asitpant80/capstoneap:1.0.0
         imagePullPolicy: "Always"
         ports:
         - containerPort: 80
